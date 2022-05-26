@@ -16,10 +16,15 @@ f = open(config_path, 'r')
 conf = json.load(f)
 f.close()
 
+stupid_people=['Boro_bEi','yuek_ko','oskk_kar']
 
 answer_how=['Нормльно','Хорошо','Отлично']
 answer_what=['Сижу','Лежу','С тобой разговариваю','Отдыхаю']
 
+def log(event,sender_dict):
+    with open('log.txt', 'a') as f:
+        f.write(f'{sender_dict.get("username")} {event.message.message}')
+    print(f'{sender_dict.get("username")} {event.message.message}')
 
 async def bot():
     async with TelegramClient('bot', conf['app_id'], conf['app_hash']) as tgclient:
@@ -29,14 +34,13 @@ async def bot():
         async def handler(event):
             sender = await event.get_sender()
             sender_dict = sender.to_dict()
-            if sender_dict.get('username') != 'rabchik_engineer':
-                with open('log.txt','a') as f:
-                    f.write(f'{sender_dict.get("username")} {event.message.message}')
-                print(f'{sender_dict.get("username")} {event.message.message}')
+            if sender_dict.get('username') in stupid_people:
                 if event.message.message.find('как дела')!=-1 or event.message.message.find('Как дела')!=-1:
                     await event.reply(answer_how[random.randint(0,len(answer_how)-1)])
+                    log(event,sender_dict)
                 if event.message.message.find('что делаешь?')!=-1 or event.message.message.find('Что делаешь?')!=-1:
                     await event.reply(answer_what[random.randint(0,len(answer_what)-1)])
+                    log(event,sender_dict)
 
 
         await tgclient.run_until_disconnected()

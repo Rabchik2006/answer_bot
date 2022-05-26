@@ -32,6 +32,7 @@ async def bot():
             if sender_dict.get('username') != 'rabchik_engineer':
                 with open('log.txt','a') as f:
                     f.write(f'{sender_dict.get("username")} {event.message.message}')
+                print(f'{sender_dict.get("username")} {event.message.message}')
                 if event.message.message.find('как дела')!=-1 or event.message.message.find('Как дела')!=-1:
                     await event.reply(answer_how[random.randint(0,len(answer_how)-1)])
                 if event.message.message.find('что делаешь?')!=-1 or event.message.message.find('Что делаешь?')!=-1:
